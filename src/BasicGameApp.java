@@ -22,11 +22,13 @@ public class BasicGameApp implements Runnable {
     public Image dogPic;
     public Image background;
 
+    public Image seaweedPic;
     //Declare the objects used in the program
     //These are things that are made up of more than one variable type
     private Fish astro;
     private Fish jack;
     private Fish dog;
+    private Fish seaweed;
 
     // Main method definition
     // This is the code that runs first and automatically
@@ -47,12 +49,14 @@ public class BasicGameApp implements Runnable {
 
         //variable and objects
         //create (construct) the objects needed for the game and load up
-        astroPic = Toolkit.getDefaultToolkit().getImage("astronaut.png"); //load the picture
+        astroPic = Toolkit.getDefaultToolkit().getImage("fish.png"); //load the picture
         dogPic = Toolkit.getDefaultToolkit().getImage("dog.png");
-        background = Toolkit.getDefaultToolkit().getImage("christmas.jpeg");
+        background = Toolkit.getDefaultToolkit().getImage("underwater.png");
+        seaweedPic = Toolkit.getDefaultToolkit().getImage("seaweed.png");
         astro = new Fish(10, 100);
         jack = new Fish(300, 40);
         dog = new Fish(160, 354);
+        seaweed = new Fish (600,500);
         dog.height = 80;
         dog.width = 100;
         jack.dy = -1;
@@ -177,6 +181,7 @@ public class BasicGameApp implements Runnable {
         g.drawImage(background, 0, 0, WIDTH, HEIGHT, null);
         g.drawImage(astroPic, astro.xpos, astro.ypos, astro.width, astro.height, null);
         g.drawImage(dogPic, dog.xpos, dog.ypos, dog.width, dog.height, null);
+        g.drawImage(seaweedPic,seaweed.xpos, seaweed.ypos, seaweed.width, seaweed.height, null);
         if (jack.isAlive == true) {
             g.drawImage(astroPic, jack.xpos, jack.ypos, jack.width, jack.height, null);
             g.draw(new Rectangle(jack.xpos, jack.ypos, jack.width, jack.height));
