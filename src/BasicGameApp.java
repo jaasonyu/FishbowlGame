@@ -82,41 +82,66 @@ public class BasicGameApp implements Runnable {
 
             moveThings();  //move all the game objects
             render();  // paint the graphics
-            pause(20); // sleep for 10 ms
+            pause(15); // sleep for 10 ms
         }
     }
 
     public void crash() {
         //System.out.println("w: " + dog.rec.width+"h: " +dog.rec.height);
-        System.out.println("w: " + astro.rec.width + "h: " + astro.rec.height);
+
 
         if (jack.rec.intersects(astro.rec) && jack.isAlive == true && astro.isAlive == true) {
             System.out.println("crash");
             astro.dx = -1 * astro.dx;
             astro.dy = -1 * astro.dy;
             jack.dx = -jack.dx;
+
+        }
+
+
+        //System.out.println("jack rec x: "+ jack.rec.x +"jack rec y: " +jack.rec.y);
+        System.out.println(" jack crash count" + jack.crashCount);
+        if (jack.rec.intersects(dog.rec) && jack.crashCount % 2 == 1 && astro.isAlive == true && jack.isCrashingDog == false) {
+            System.out.println("crash");
             jack.isAlive = false;
+           // jack.resurect = true;
+
+           // dog.(Color.RED);
+            dog.changeColor = true;
+            jack.crashCount ++;
         }
-        if (jack.rec.intersects(dog.rec)) {
-            System.out.println("crash");
-            System.out.println("crash");
-            dog.dx = -1 * dog.dx;
-            dog.dy = -1 * dog.dy;
-            jack.dx = -jack.dx;
-            jack.dy = -jack.dy;
+        if (jack.rec.intersects(dog.rec) && jack.isCrashingDog == false && jack.isAlive == false && jack.crashCount % 2 == 0) {
+            System.out.println("resurect jack");
+            jack.isAlive = true;
+            //jack.resurect = true;
+            jack.crashCount++;
+            jack.isCrashingDog = true;
         }
-        if (astro.rec.intersects(dog.rec)) {
+        if (astro.rec.intersects(dog.rec) && astro.isCrashingDog == false) {
             //	System.out.println("crash");
             System.out.println("crash");
             dog.dx = -1 * dog.dx;
             dog.dy = -1 * dog.dy;
             astro.dy = -astro.dy;
             expand();
+            System.out.println("w: " + astro.rec.width + "h: " + astro.rec.height);
+            astro.isCrashingDog = true;
+        }
+        if (astro.rec.intersects(dog.rec) == false){
+            astro.isCrashingDog = false;
+        }
+        if (jack.rec.intersects(dog.rec) == false){
+            jack.isCrashingDog = false;
         }
     }
 
     public void expand() {
-        astro.height = (int) (1.5 * astro.height);
+        if (astro.height < 100) {
+            astro.height = (int) (1.5 * astro.height);
+            if (astro.width < 100) {
+                astro.width = (int) (1.2 * astro.width);
+            }
+        }
     }
 
     public void moveThings() {
@@ -182,13 +207,19 @@ public class BasicGameApp implements Runnable {
         g.drawImage(astroPic, astro.xpos, astro.ypos, astro.width, astro.height, null);
         g.drawImage(dogPic, dog.xpos, dog.ypos, dog.width, dog.height, null);
         g.drawImage(seaweedPic,seaweed.xpos, seaweed.ypos, seaweed.width, seaweed.height, null);
-        if (jack.isAlive == true) {
+        if (jack.isAlive == true || jack.resurect == true) {
             g.drawImage(astroPic, jack.xpos, jack.ypos, jack.width, jack.height, null);
-            g.draw(new Rectangle(jack.xpos, jack.ypos, jack.width, jack.height));
+//            g.draw(new Rectangle(jack.xpos, jack.ypos, jack.width, jack.height));
             g.setColor(Color.CYAN);
         }
+        g.draw(new Rectangle(jack.xpos, jack.ypos, jack.width, jack.height));
+
+
 
         g.draw(new Rectangle(astro.xpos, astro.ypos, astro.width, astro.height));
+        if(dog.changeColor==true){
+            g.setColor(Color.RED);
+        }
         g.draw(new Rectangle(dog.xpos, dog.ypos, dog.width, dog.height));
         g.dispose();
 

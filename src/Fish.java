@@ -1,3 +1,4 @@
+import javax.swing.*;
 import java.awt.*;
 
 /**
@@ -17,6 +18,11 @@ public class Fish {
     public boolean isAlive;            //a boolean to denote if the hero is alive or dead.
     public Rectangle rec;
 
+    public boolean isCrashingDog;
+    public boolean changeColor;
+    public boolean resurect;
+    public int crashCount;
+
 
     // METHOD DEFINITION SECTION
 
@@ -35,6 +41,10 @@ public class Fish {
         height = 60;
         isAlive = true;
         rec = new Rectangle(xpos,ypos,height,width);
+        changeColor = false;
+        isCrashingDog = false;
+        resurect = false;
+        crashCount = 1;
 
     } // constructor
 
@@ -42,7 +52,7 @@ public class Fish {
     public void move() {
         xpos = xpos + dx;
         ypos = ypos + dy;
-        rec = new Rectangle(xpos,ypos,height,width);
+        rec = new Rectangle(xpos,ypos, width,height);
     }
 
     public void wrap(){
@@ -51,16 +61,17 @@ public class Fish {
         }
         xpos = xpos + dx;
         ypos = ypos + dy;
-        rec = new Rectangle(xpos,ypos,height,width);
+        rec = new Rectangle(xpos,ypos,width,height);
     }
     public void bounce(){
+
         if(xpos>1000-width){
             dx=-dx;
         }
         if(xpos<=0){
             dx=-dx;
         }
-        if(ypos>720-width){
+        if(ypos>700-width){
             dy=-dy;
         }
         if(ypos<=0){
@@ -68,9 +79,8 @@ public class Fish {
         }
         xpos = xpos + dx;
         ypos = ypos + dy;
-        rec = new Rectangle(xpos,ypos,height,width);
-    }
-}
+        rec = new Rectangle(xpos,ypos,width,height);
+    }}
 
 
 
