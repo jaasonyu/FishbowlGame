@@ -23,6 +23,7 @@ public class BasicGameApp implements Runnable {
     public Image background;
 
     public Image seaweedPic;
+    public Image diedPic;
     //Declare the objects used in the program
     //These are things that are made up of more than one variable type
     private Fish astro;
@@ -53,6 +54,7 @@ public class BasicGameApp implements Runnable {
         dogPic = Toolkit.getDefaultToolkit().getImage("dog.png");
         background = Toolkit.getDefaultToolkit().getImage("underwater.png");
         seaweedPic = Toolkit.getDefaultToolkit().getImage("seaweed.png");
+        diedPic = Toolkit.getDefaultToolkit().getImage("died.png");
         astro = new Fish(10, 100);
         jack = new Fish(300, 40);
         dog = new Fish(160, 354);
@@ -82,7 +84,7 @@ public class BasicGameApp implements Runnable {
 
             moveThings();  //move all the game objects
             render();  // paint the graphics
-            pause(15); // sleep for 10 ms
+            pause(8); // sleep for 10 ms
         }
     }
 
@@ -101,24 +103,26 @@ public class BasicGameApp implements Runnable {
 
         //System.out.println("jack rec x: "+ jack.rec.x +"jack rec y: " +jack.rec.y);
         System.out.println(" jack crash count" + jack.crashCount);
-        if (jack.rec.intersects(dog.rec) && jack.crashCount % 2 == 1 && astro.isAlive == true && jack.isCrashingDog == false) {
-            System.out.println("crash");
-            jack.isAlive = false;
-           // jack.resurect = true;
+        if (jack.rec.intersects(dog.rec) && astro.isAlive == true && jack.isCrashingDog == false) {
 
-           // dog.(Color.RED);
-            dog.changeColor = true;
-            jack.crashCount ++;
-        }
-        if (jack.rec.intersects(dog.rec) && jack.isCrashingDog == false && jack.isAlive == false && jack.crashCount % 2 == 0) {
-            System.out.println("resurect jack");
-            jack.isAlive = true;
-            //jack.resurect = true;
-            jack.crashCount++;
+            if (jack.crashCount % 2 == 1) {
+                System.out.println("crash");
+                jack.isAlive = false;
+                // jack.resurect = true;
+
+                // dog.(Color.RED);
+                dog.changeColor = true;
+
+            } else {
+                System.out.println("resurect jack");
+                jack.isAlive = true;
+            }
             jack.isCrashingDog = true;
+
+            jack.crashCount++;
         }
         if (astro.rec.intersects(dog.rec) && astro.isCrashingDog == false) {
-            //	System.out.println("crash");
+            // System.out.println("crash");
             System.out.println("crash");
             dog.dx = -1 * dog.dx;
             dog.dy = -1 * dog.dy;
@@ -127,10 +131,10 @@ public class BasicGameApp implements Runnable {
             System.out.println("w: " + astro.rec.width + "h: " + astro.rec.height);
             astro.isCrashingDog = true;
         }
-        if (astro.rec.intersects(dog.rec) == false){
+        if (astro.rec.intersects(dog.rec) == false) {
             astro.isCrashingDog = false;
         }
-        if (jack.rec.intersects(dog.rec) == false){
+        if (jack.rec.intersects(dog.rec) == false) {
             jack.isCrashingDog = false;
         }
     }
@@ -206,25 +210,29 @@ public class BasicGameApp implements Runnable {
         g.drawImage(background, 0, 0, WIDTH, HEIGHT, null);
         g.drawImage(astroPic, astro.xpos, astro.ypos, astro.width, astro.height, null);
         g.drawImage(dogPic, dog.xpos, dog.ypos, dog.width, dog.height, null);
-        g.drawImage(seaweedPic,seaweed.xpos, seaweed.ypos, seaweed.width, seaweed.height, null);
-        if (jack.isAlive == true || jack.resurect == true) {
+        g.drawImage(seaweedPic, seaweed.xpos, seaweed.ypos, seaweed.width, seaweed.height, null);
+        if (jack.isAlive == true ) {
             g.drawImage(astroPic, jack.xpos, jack.ypos, jack.width, jack.height, null);
 //            g.draw(new Rectangle(jack.xpos, jack.ypos, jack.width, jack.height));
             g.setColor(Color.CYAN);
+            g.draw(new Rectangle(jack.xpos, jack.ypos, jack.width, jack.height));
+
         }
-        g.draw(new Rectangle(jack.xpos, jack.ypos, jack.width, jack.height));
-
-
+        if (jack.isAlive == false ) {
+            g.drawImage(diedPic,400,300,300,80,null);
+        }
+        if (jack.crashCount == 5){
+            g.drawImage(diedPic,0,0,1000,1000,null);
+        }
 
         g.draw(new Rectangle(astro.xpos, astro.ypos, astro.width, astro.height));
-        if(dog.changeColor==true){
+        if (dog.changeColor == true) {
             g.setColor(Color.RED);
         }
         g.draw(new Rectangle(dog.xpos, dog.ypos, dog.width, dog.height));
         g.dispose();
 
         bufferStrategy.show();
-    }
-}
+    }}
 
 
