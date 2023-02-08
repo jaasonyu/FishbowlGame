@@ -23,7 +23,7 @@ public class BasicGameApp implements Runnable {
     public Image background;
 
     public Image seaweedPic;
-    public Image diedPic;
+
     //Declare the objects used in the program
     //These are things that are made up of more than one variable type
     private Fish astro;
@@ -54,17 +54,17 @@ public class BasicGameApp implements Runnable {
         dogPic = Toolkit.getDefaultToolkit().getImage("dog.png");
         background = Toolkit.getDefaultToolkit().getImage("underwater.png");
         seaweedPic = Toolkit.getDefaultToolkit().getImage("seaweed.png");
-        diedPic = Toolkit.getDefaultToolkit().getImage("died.png");
         astro = new Fish(10, 100);
         jack = new Fish(300, 40);
         dog = new Fish(160, 354);
-        seaweed = new Fish (600,500);
+        seaweed = new Fish(600, 500);
         dog.height = 80;
         dog.width = 100;
         jack.dy = -1;
         jack.dx = 3;
         dog.dy = 2;
         astro.dx = 3;
+        
 
 
     }// BasicGameApp()
@@ -93,7 +93,7 @@ public class BasicGameApp implements Runnable {
 
 
         if (jack.rec.intersects(astro.rec) && jack.isAlive == true && astro.isAlive == true) {
-            System.out.println("crash");
+            // System.out.println("crash");
             astro.dx = -1 * astro.dx;
             astro.dy = -1 * astro.dy;
             jack.dx = -jack.dx;
@@ -120,6 +120,7 @@ public class BasicGameApp implements Runnable {
             jack.isCrashingDog = true;
 
             jack.crashCount++;
+
         }
         if (astro.rec.intersects(dog.rec) && astro.isCrashingDog == false) {
             // System.out.println("crash");
@@ -131,7 +132,7 @@ public class BasicGameApp implements Runnable {
             System.out.println("w: " + astro.rec.width + "h: " + astro.rec.height);
             astro.isCrashingDog = true;
         }
-        if (astro.rec.intersects(dog.rec) == false) {
+        if (!astro.rec.intersects(dog.rec)) {
             astro.isCrashingDog = false;
         }
         if (jack.rec.intersects(dog.rec) == false) {
@@ -170,6 +171,7 @@ public class BasicGameApp implements Runnable {
         }
     }
 
+
     //Graphics setup method
     private void setUpGraphics() {
         frame = new JFrame("Application Template");   //Create the program window or frame.  Names it.
@@ -202,37 +204,59 @@ public class BasicGameApp implements Runnable {
 
 
     //paints things on the screen using bufferStrategy
-    private void render() {
-        Graphics2D g = (Graphics2D) bufferStrategy.getDrawGraphics();
-        g.clearRect(0, 0, WIDTH, HEIGHT);
-
-        //draw the image of the astronaut
-        g.drawImage(background, 0, 0, WIDTH, HEIGHT, null);
-        g.drawImage(astroPic, astro.xpos, astro.ypos, astro.width, astro.height, null);
-        g.drawImage(dogPic, dog.xpos, dog.ypos, dog.width, dog.height, null);
-        g.drawImage(seaweedPic, seaweed.xpos, seaweed.ypos, seaweed.width, seaweed.height, null);
-        if (jack.isAlive == true ) {
-            g.drawImage(astroPic, jack.xpos, jack.ypos, jack.width, jack.height, null);
+    public void render() {
+            Graphics2D g = (Graphics2D) bufferStrategy.getDrawGraphics();
+            g.clearRect(0, 0, WIDTH, HEIGHT);
+            if (jack.crashCount == 1) {
+                String f = "Aim of Game: Don't let Jack die more than 10 times.";
+                g.setFont(new Font("Calibri", Font.BOLD, 100));
+                g.drawString(f, 125, 500);
+            }
+            int c = jack.crashCount - 1;
+            String s = "Jack died " + c + " times";
+            //draw the image of the astronaut
+            g.drawImage(background, 0, 0, WIDTH, HEIGHT, null);
+            g.drawImage(astroPic, astro.xpos, astro.ypos, astro.width, astro.height, null);
+            g.drawImage(dogPic, dog.xpos, dog.ypos, dog.width, dog.height, null);
+            g.drawImage(seaweedPic, seaweed.xpos, seaweed.ypos, seaweed.width, seaweed.height, null);
+            g.setFont(new Font("Arial", Font.CENTER_BASELINE, 30));
+            g.drawString(s, 100, 100);
+            if (jack.isAlive == true) {
+                g.drawImage(astroPic, jack.xpos, jack.ypos, jack.width, jack.height, null);
 //            g.draw(new Rectangle(jack.xpos, jack.ypos, jack.width, jack.height));
-            g.setColor(Color.CYAN);
-            g.draw(new Rectangle(jack.xpos, jack.ypos, jack.width, jack.height));
+                g.setColor(Color.CYAN);
+                g.draw(new Rectangle(jack.xpos, jack.ypos, jack.width, jack.height));
 
-        }
-        if (jack.isAlive == false ) {
-            g.drawImage(diedPic,400,300,300,80,null);
-        }
-        if (jack.crashCount == 5){
-            g.drawImage(diedPic,0,0,1000,1000,null);
-        }
+            }
+            if (jack.isAlive == false) {
+                if (jack.crashCount == 3) {
+                    String d = "Jack died AGAIN.";
+                    g.setColor(Color.YELLOW);
+                    g.setFont(new Font("Comic Sans MS", Font.ITALIC, 100));
+                    g.drawString(d, 125, 500);
+                }
+                if (jack.crashCount == 11) {
+                    String d = "END GAME";
+                    g.setColor(Color.PINK);
+                    g.setFont(new Font("Comic Sans MS", Font.ITALIC, 100));
+                    g.drawString(d, 125, 500);
+                } else {
+                    String p = "Jack died.";
+                    g.setColor(Color.ORANGE);
+                    g.setFont(new Font("Lobster", Font.ITALIC, 100));
+                    g.drawString(p, 300, 400);
+                }
+            }
 
-        g.draw(new Rectangle(astro.xpos, astro.ypos, astro.width, astro.height));
-        if (dog.changeColor == true) {
-            g.setColor(Color.RED);
-        }
-        g.draw(new Rectangle(dog.xpos, dog.ypos, dog.width, dog.height));
-        g.dispose();
+            g.draw(new Rectangle(astro.xpos, astro.ypos, astro.width, astro.height));
+            if (dog.changeColor == true) {
+                g.setColor(Color.RED);
+            }
+            g.draw(new Rectangle(dog.xpos, dog.ypos, dog.width, dog.height));
+            g.dispose();
 
-        bufferStrategy.show();
-    }}
+            bufferStrategy.show();
+        }
+    }
 
 

@@ -22,6 +22,7 @@ public class Fish {
     public boolean changeColor;
     public boolean resurect;
     public int crashCount;
+    public boolean endGame;
 
 
     // METHOD DEFINITION SECTION
@@ -45,6 +46,7 @@ public class Fish {
         isCrashingDog = false;
         resurect = false;
         crashCount = 1;
+        endGame = false;
 
     } // constructor
 
