@@ -120,9 +120,6 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener, Mouse
             if (jack.crashCount % 2 == 1) {
                 System.out.println("crash");
                 jack.isAlive = false;
-                // jack.resurect = true;
-
-                // dog.(Color.RED);
                 dog.changeColor = true;
 
             } else {
@@ -130,7 +127,6 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener, Mouse
                 jack.isAlive = true;
             }
             jack.isCrashingDog = true;
-
             jack.crashCount++;
 
         }
@@ -153,6 +149,7 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener, Mouse
         if (angel.rec.intersects(dog.rec)==true && jack.isAlive == false && angel.isCrashingDog == false){
             angel.dx=-1*angel.dx;
             jack.crashCount--;
+            angel.isCrashingDog = true;
 
         }
     }
