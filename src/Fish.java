@@ -61,6 +61,9 @@ public class Fish {
         if(xpos>1000){
             xpos = 0;
         }
+        if(xpos<0){
+            xpos = 1000;
+        }
         xpos = xpos + dx;
         ypos = ypos + dy;
         rec = new Rectangle(xpos,ypos,width,height);
